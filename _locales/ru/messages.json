@@ -1,0 +1,36 @@
+{
+    "lor_notifier": {
+        "message": "LOR Кнопка",
+        "description": "Имя расширения."
+    },
+    "description": {
+        "message": "Отображает число непрочитанных уведомлений на linux.org.ru.",
+        "description": "Краткое описание расширения."
+    },
+    "unread_notifications": {
+        "message": "$n$ непрочитанных уведомлений",
+        "description": "Число непрочитанных уведомлений.",
+        "placeholders": {
+            "n" : {
+                "content" : "$1",
+                "example" : "1"
+            }
+        }
+    },
+    "no_unread_notifications": {
+        "message": "Нет непрочитанных уведомлений"
+    },
+    "you_have_to_be_logged": {
+        "message": "Вы вошли на $url$",
+        "description": "",
+        "placeholders": {
+            "url" : {
+                "content" : "$1",
+                "example" : "https://www.linux.org.ru"
+            }
+        }
+    },
+    "server_not_found": {
+        "message": "Сервер не найден"
+    }
+}

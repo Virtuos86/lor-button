@@ -1,0 +1,36 @@
+{
+    "lor_notifier": {
+        "message": "LOR No﻿ti﻿fi﻿er",
+        "description": "Extension name."
+    },
+    "description": {
+        "message": "Display the number of unread notifications from linux.org.ru.",
+        "description": "The description of the extension."
+    },
+    "unread_notifications": {
+        "message": "$n$ unread no﻿ti﻿fi﻿ca﻿ti﻿on",
+        "description": "",
+        "placeholders": {
+            "n" : {
+                "content" : "$1",
+                "example" : "1"
+            }
+        }
+    },
+    "no_unread_notifications": {
+        "message": "No unread notifications"
+    },
+    "you_have_to_be_logged": {
+        "message": "You have to be logged into $url$",
+        "description": "",
+        "placeholders": {
+            "url" : {
+                "content" : "$1",
+                "example" : "https://www.linux.org.ru"
+            }
+        }
+    },
+    "server_not_found": {
+        "message": "Server not found"
+    }
+}

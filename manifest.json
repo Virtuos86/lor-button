@@ -1,0 +1,33 @@
+{
+  "manifest_version": 2,
+  "name": "__MSG_lor_notifier__",
+  "version": "0.2.0",
+  "author": "Virtuos86",
+
+  "default_locale": "ru",
+  "description": "__MSG_description__",
+  "icons": {
+    "48": "extension/icon.png",
+    "64": "extension/icon64.png"
+  },
+
+  "options_ui": {
+    "chrome_style": true,
+    "page": "extension/options.html"
+  },
+
+  "background": {
+    "scripts": ["extension/lib/button/status.js", "extension/lib/main.js"]
+  },
+
+  "browser_action": {
+    "chrome_style": true,
+    "default_icon": {
+      "16": "extension/data/icon.png",
+      "32": "extension/data/icon@2x.png"
+    },
+    "default_title": "LOR-button"
+  },
+
+  "permissions": ["https://www.linux.org.ru/", "notifications", "storage"]
+}

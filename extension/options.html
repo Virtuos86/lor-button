@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>LOR Notifier</title>
+    <style>
+      body: { padding: 10px; }
+    </style>
+  </head>
+
+  <body>
+    <table>
+      <form id="form">
+        <tr>
+          <td>
+            Set interval:
+          </td>
+          <td>
+            <input type="number" id="autorefreshIntervalSecs">
+          </td>
+          <td>
+            sec.
+          </td>
+        </tr>
+          <td>
+
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button type="submit" id="save">Save</button>
+          </td>
+          <td>
+            <div id="status"></div>
+          </td>
+        </tr>
+      </form>
+    </table>
+
+    <script src="lib/options.js"></script>
+  </body>
+</html>
