@@ -3,43 +3,57 @@ function StatusButton(options) {
     var ERROR_LOGIN = 2;
     var ERROR_CONNECT = 3;
 
-    var icon = options.icon;
-    var site = options.site;
-
     var button = {
         id: options.id,
         label: options.label,
-        icon: icon.normal,
+        icon: options.icon,
         onClick: options.onClick
     };
 
-    var setState = function(status, count=0) {
+    function setState(status, count=0) {
         switch(status) {
             case NORMAL:
                 if (count > 0) {
-                    button.label = chrome.i18n.getMessage("unread_notifications", count);
-                    button.icon = icon.notice;
-                }
-                else {
-                    button.label = chrome.i18n.getMessage("no_unread_notifications");
-                    button.icon = icon.normal;
+                    chrome.browserAction.setIcon({ path: button.icon.normal });
+                    if (count == 1) {
+                        chrome.browserAction.setTitle({
+                            title: count.toString() + chrome.i18n.getMessage("unread_notification")
+                        });
+                    } else if (count < 5) {
+                        chrome.browserAction.setTitle({
+                            title: count.toString() + chrome.i18n.getMessage("unread_notifications24")
+                        });
+                    } else {
+                        chrome.browserAction.setTitle({
+                            title: count.toString() + chrome.i18n.getMessage("unread_notifications5N")
+                        });
+                    }
+                } else {
+                    chrome.browserAction.setIcon({ path: button.icon.normal });
+                    chrome.browserAction.setTitle({
+                        title: chrome.i18n.getMessage("no_unread_notifications")
+                    });
                 }
                 break;
             case ERROR_LOGIN:
-                button.label = chrome.i18n.getMessage("you_have_to_be_logged_into", site);
-                button.icon = icon.error;
+                chrome.browserAction.setIcon({ path: button.icon.error });
+                chrome.browserAction.setTitle({
+                    title: chrome.i18n.getMessage("you_need_to_be_logged_into", options.site)
+                });
                 break;
             case ERROR_CONNECT:
-                button.label = chrome.i18n.getMessage("server_not_found");
-                button.icon = icon.error;
+                chrome.browserAction.setIcon({ path: button.icon.error });
+                chrome.browserAction.setTitle({
+                    title: chrome.i18n.getMessage("server_not_found")
+                });
         }
     };
 
     return {
+        button: button,
         NORMAL: NORMAL,
         ERROR_LOGIN: ERROR_LOGIN,
         ERROR_CONNECT: ERROR_CONNECT,
-
         setState: setState
     };
 }

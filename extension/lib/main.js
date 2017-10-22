@@ -10,7 +10,20 @@
 /* ::::: ::::: */
 
 const checkUrl = "https://www.linux.org.ru/notifications-count";
+const notifUrlPattern = "*://www.linux.org.ru/notifications";
 const notifUrl = "https://www.linux.org.ru/notifications";
+var XHR = new XMLHttpRequest();
+
+function Request(options) {
+    XHR.abort();
+    XHR.open("GET", options.url, true);
+    var timeout = setTimeout(() => { XHR.abort(); }, 10000);
+    XHR.onreadystatechange = () => {
+        clearTimeout(timeout);
+        options.onComplete(XHR);
+    };
+    XHR.send(null);
+};
 
 /* ::::: Status Button ::::: */
 
@@ -20,47 +33,63 @@ var button = StatusButton({
     label: chrome.i18n.getMessage("lor_notifier"),
     icon: {
         normal: {
-            "18": "./icon.png",
-            "32": "./icon-menuPanel.png",
-            "36": "./icon@2x.png",
-            "64": "./icon-menuPanel@2x.png"
+            "18": "extension/data/icon.png",
+            "32": "extension/data/icon-menuPanel.png",
+            "36": "extension/data/icon@2x.png",
+            "64": "extension/data/icon-menuPanel@2x.png"
         },
         notice: {
-            "18": "./iconNotification.png",
-            "32": "./iconNotification-menuPanel.png",
-            "36": "./iconNotification@2x.png",
-            "64": "./iconNotification-menuPanel@2x.png"
+            "18": "extension/data/iconNotification.png",
+            "32": "extension/data/iconNotification-menuPanel.png",
+            "36": "extension/data/iconNotification@2x.png",
+            "64": "extension/data/iconNotification-menuPanel@2x.png"
         },
         error: {
-            "18": "./iconWarning.png",
-            "32": "./iconWarning-menuPanel.png",
-            "36": "./iconWarning@2x.png",
-            "64": "./iconWarning-menuPanel@2x.png"
+            "18": "extension/data/iconWarning.png",
+            "32": "extension/data/iconWarning-menuPanel.png",
+            "36": "extension/data/iconWarning@2x.png",
+            "64": "extension/data/iconWarning-menuPanel@2x.png"
         }
     },
-    onClick: function(state) {
-        var tabExists = false;
-        for (var tab in tabs) {
-            if (tab.url === notifUrl) {
-                tab.activate();
-                tab.reload();
+    onClick: function(currentTab) {
+        function onGetTabs(tabs) {
+            /// If exists a tab with URL == `notify_Url` then we switches to this tab.
+            var tab;
+            var tabExists = false;
+            for (var i in tabs) {
+                tab = tabs[i];
+                chrome.tabs.update(tab.id, { url: notifUrl, active: true });
                 tabExists = true;
                 break;
             }
-        }
-
-        if (!tabExists) {
-            var urls = ["about:blank", "about:newtab", "about:home"];
-            if (urls.indexOf(tabs.activeTab.url) > -1) {
-                tabs.activeTab.url = notifUrl;
+            function onGetAllTabs(tabs) {
+                /// If opened a new tab (or the start page) then we goes to the `notify_Url`.
+                if (!tabExists) {
+                    var urls = [
+                        "about:blank",
+                        "about:newtab",
+                        "about:home",
+                        "chrome://startpage/",
+                        "chrome://newtab/"
+                    ];
+                    var tab = tabs.filter((tab) => {
+                        if (tab.active)
+                            return tab;
+                        else
+                            return null;
+                    })[0];
+                    if (urls.indexOf(tab.url) > -1) {
+                        chrome.tabs.update(tab.id, { url: notifUrl });
+                    }
+                    else {
+                        chrome.tabs.create({ url: notifUrl });
+                    }
+                }
             }
-            else {
-                tabs.open(notifUrl);
-            }
+            chrome.tabs.query({}, onGetAllTabs);
+            setTimeout(update, 5 * 1000);
         }
-
-        timers.setTimeout(update, 5 * 1000);
-        timers.setTimeout(update, 25 * 1000);
+        chrome.tabs.query({ url: notifUrlPattern }, onGetTabs);
     }
 });
 
@@ -69,10 +98,12 @@ var button = StatusButton({
 function update() {
     Request({
         url: checkUrl,
-        onComplete: function (response) {
-            switch (response.status) {
+        onComplete: function (xhr) {
+            switch (xhr.status) {
                 case 200:
-                    let count = parseInt(response.text);
+                    var count = parseInt(xhr.responseText);
+                    if (count.toString() == "NaN")
+                        break;
                     button.setState(button.NORMAL, count);
                     break;
                 case 403:
@@ -82,28 +113,51 @@ function update() {
                     button.setState(button.ERROR_CONNECT);
             }
         }
-    }).get();
+    });
 };
-
-update(); // Start first update
 
 /* ::::: Set timer ::::: */
 
 var timerId = null;
 var updateInterval;
 
-function updateTimer() {
-    if (timerId !== null) {
-        timers.clearInterval(timerId);
-    }
-
-    updateInterval = prefs["update-interval"];
+function onOk(item) {
+    updateInterval = item["update-interval"];
     if (updateInterval < 5)
         updateInterval = 5;
 
-    timerId = timers.setInterval(update, updateInterval * 1000);
+    timerId = setInterval(update, updateInterval * 1000);
 }
 
-updateTimer();
-simplePrefs.on("update-interval", updateTimer);
+function updateTimer() {
+    if (timerId !== null) {
+        clearInterval(timerId);
+    } else {
+        update();
+    }
+    chrome.storage.sync.get({ "update-interval": 60 }, onOk);
+}
 
+//chrome.browserAction.setBadgeBackgroundColor({
+//    "color": "#FF0000"
+//}); // #RGBA
+//chrome.browserAction.setBadgeText({
+//    "text": "LOR"
+//}); // This text (only 4 chars allowed) will be shown on the background specified with `chrome.browserAction.setBadgeBackgroundColor`
+
+chrome.browserAction.onClicked.addListener(button.button.onClick);
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+    for (key in changes) {
+        var storageChange = changes[key];
+        /*console.log('Storage key "%s" in namespace "%s" changed. ' +
+                    'Old value was "%s", new value is "%s".',
+                    key,
+                    namespace,
+                    storageChange.oldValue,
+                    storageChange.newValue);*/
+        if (storageChange.newValue) {
+            updateTimer();
+        }
+    }
+});
+updateTimer();

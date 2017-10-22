@@ -7,26 +7,28 @@
         "message": "Отображает число непрочитанных уведомлений на linux.org.ru.",
         "description": "Краткое описание расширения."
     },
-    "unread_notifications": {
-        "message": "$n$ непрочитанных уведомлений",
-        "description": "Число непрочитанных уведомлений.",
-        "placeholders": {
-            "n" : {
-                "content" : "$1",
-                "example" : "1"
-            }
-        }
+    "unread_notification": {
+        "message": " непрочитанное уведомление",
+        "description": "Число непрочитанных уведомлений."
+    },
+    "unread_notifications24": {
+        "message": " непрочитанных уведомления",
+        "description": "Число непрочитанных уведомлений."
+    },
+    "unread_notifications5N": {
+        "message": " непрочитанных уведомлений",
+        "description": "Число непрочитанных уведомлений."
     },
     "no_unread_notifications": {
         "message": "Нет непрочитанных уведомлений"
     },
-    "you_have_to_be_logged": {
-        "message": "Вы вошли на $url$",
+    "you_need_to_be_logged_into": {
+        "message": "Вы должны авторизоваться на $url$",
         "description": "",
         "placeholders": {
-            "url" : {
-                "content" : "$1",
-                "example" : "https://www.linux.org.ru"
+            "url": {
+                "content": "$1",
+                "example": "https://www.linux.org.ru"
             }
         }
     },
