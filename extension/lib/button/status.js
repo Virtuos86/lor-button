@@ -14,7 +14,7 @@ function StatusButton(options) {
         switch(status) {
             case NORMAL:
                 if (count > 0) {
-                    chrome.browserAction.setIcon({ path: button.icon.normal });
+                    chrome.browserAction.setIcon({ path: button.icon.notice });
                     if (count == 1) {
                         chrome.browserAction.setTitle({
                             title: count.toString() + chrome.i18n.getMessage("unread_notification")
