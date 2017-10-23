@@ -29,3 +29,11 @@ function restoreOptions() {
 
 document.addEventListener("DOMContentLoaded", restoreOptions);
 document.getElementById("form").addEventListener("submit", saveOptions);
+document.body.children[0].children[1].children[2].children[1].addEventListener(
+    "click",
+    () => {
+        chrome.tabs.query({ active: true }, (tabs) => {
+            chrome.tabs.remove(tabs[0].id);
+        });
+    }
+);
