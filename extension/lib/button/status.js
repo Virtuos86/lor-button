@@ -3,37 +3,32 @@ function StatusButton(options) {
     var ERROR_LOGIN = 2;
     var ERROR_CONNECT = 3;
 
-    var button = {
-        id: options.id,
-        label: options.label,
-        icon: options.icon,
-        onClick: options.onClick
-    };
+    var button = new Object(options);
 
     function setState(status, count=0) {
         switch(status) {
             case NORMAL:
+                var path;
+                var msg;
                 if (count > 0) {
-                    chrome.browserAction.setIcon({ path: button.icon.notice });
+                    path = button.icon.notice;
                     if (count == 1) {
-                        chrome.browserAction.setTitle({
-                            title: count.toString() + chrome.i18n.getMessage("unread_notification")
-                        });
+                        msg = "unread_notification";
                     } else if (count < 5) {
-                        chrome.browserAction.setTitle({
-                            title: count.toString() + chrome.i18n.getMessage("unread_notifications24")
-                        });
+                        msg = "unread_notifications24";
                     } else {
-                        chrome.browserAction.setTitle({
-                            title: count.toString() + chrome.i18n.getMessage("unread_notifications5N")
-                        });
+                        msg = "unread_notifications5N";
                     }
+                    chrome.browserAction.setBadgeText({ text: count.toString() });
                 } else {
-                    chrome.browserAction.setIcon({ path: button.icon.normal });
-                    chrome.browserAction.setTitle({
-                        title: chrome.i18n.getMessage("no_unread_notifications")
-                    });
+                    path = button.icon.normal;
+                    msg = "no_unread_notifications";
+                    chrome.browserAction.setBadgeText({ text: "" });
                 }
+                chrome.browserAction.setTitle({
+                    title: count.toString() + chrome.i18n.getMessage(msg)
+                });
+                chrome.browserAction.setIcon({ path: path });
                 break;
             case ERROR_LOGIN:
                 chrome.browserAction.setIcon({ path: button.icon.error });
@@ -57,4 +52,3 @@ function StatusButton(options) {
         setState: setState
     };
 }
-

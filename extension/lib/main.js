@@ -1,12 +1,3 @@
-//var simplePrefs = require("sdk/simple-prefs");
-//var prefs = simplePrefs.prefs;
-//var tabs = require("sdk/tabs");
-//var timers = require("sdk/timers");
-//var Request = require("sdk/request").Request;
-//var _ = require("sdk/l10n").get;
-//
-//var { StatusButton } = require("./button/status");
-
 /* ::::: ::::: */
 
 const checkUrl = "https://www.linux.org.ru/notifications-count";
@@ -145,6 +136,7 @@ function updateTimer() {
 //    "text": "LOR"
 //}); // This text (only 4 chars allowed) will be shown on the background specified with `chrome.browserAction.setBadgeBackgroundColor`
 
+chrome.browserAction.setBadgeBackgroundColor({ color: "#0099dd" });
 chrome.browserAction.onClicked.addListener(button.button.onClick);
 chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (key in changes) {
