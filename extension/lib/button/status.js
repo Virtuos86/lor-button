@@ -20,14 +20,17 @@ function StatusButton(options) {
                         msg = "unread_notifications5N";
                     }
                     chrome.browserAction.setBadgeText({ text: count.toString() });
+                    chrome.browserAction.setTitle({
+                        title: count.toString() + chrome.i18n.getMessage(msg)
+                    });
                 } else {
                     path = button.icon.normal;
                     msg = "no_unread_notifications";
                     chrome.browserAction.setBadgeText({ text: "" });
+                    chrome.browserAction.setTitle({
+                        title: chrome.i18n.getMessage(msg)
+                    });
                 }
-                chrome.browserAction.setTitle({
-                    title: count.toString() + chrome.i18n.getMessage(msg)
-                });
                 chrome.browserAction.setIcon({ path: path });
                 break;
             case ERROR_LOGIN:
