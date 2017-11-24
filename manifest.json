@@ -12,7 +12,7 @@
     },
 
     "options_ui": {
-        "chrome_style": true,
+        "browser_style": true,
         "page": "extension/options.html"
     },
 
@@ -21,7 +21,7 @@
     },
 
     "browser_action": {
-        "chrome_style": true,
+        "browser_style": true,
         "default_icon": {
             "18": "extension/data/iconWarning.png",
             "32": "extension/data/iconWarning-menuPanel.png",
